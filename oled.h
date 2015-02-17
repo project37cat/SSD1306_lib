@@ -57,6 +57,38 @@
 #define CS_L   CLR_BIT(CS_PORT, CS_PIN)
 
 
+//commands for the initialization of SSD1306
+
+const uint8_t init[] PROGMEM =
+{
+0xae, //display off sleep mode
+0xd5, //display clock divide
+0x80, //
+0xa8, //set multiplex ratio
+0x3f, //
+0xd3, //display offset
+0x00, //
+0x40, //set display start line
+0x8d, //charge pump setting
+0x14, //
+0x20, //memory addressing mode
+0x00, //horizontal addressing mode
+0xa1, //segment re-map
+0xc8, //COM output scan direction
+0xda, //COM pins hardware configuration
+0x12, //
+0x81, //set contrast
+0x8f, //0x8f, 0xcf
+0xd9, //pre-charge period
+0xf1, //
+0xdb, //VCOMH deselect level
+0x40, //
+0xa4, //entire display off
+0xa6, //normal display, 0xa7 inverse display
+0xaf  //display turned on
+};
+
+
 //font 5x7 dots, sources: http://sunge.awardspace.com/glcd-sd/node4.html
 
 const uint8_t font[] PROGMEM =
@@ -189,31 +221,7 @@ _delay_us(10); //delay for reset
 
 RST_H; //display normal operation
 
-oled_cmd(0xae); //display off (sleep mode)
-oled_cmd(0xd5); //display clock divide
-oled_cmd(0x80); //
-oled_cmd(0xa8); //set multiplex ratio
-oled_cmd(0x3f); //
-oled_cmd(0xd3); //display offset
-oled_cmd(0x00); //
-oled_cmd(0x40); //set display start line
-oled_cmd(0x8d); //charge pump setting
-oled_cmd(0x14); //
-oled_cmd(0x20); //memory addressing mode
-oled_cmd(0x00); //horizontal addressing mode
-oled_cmd(0xa1); //segment re-map
-oled_cmd(0xc8); //COM output scan direction
-oled_cmd(0xda); //COM pins hardware configuration
-oled_cmd(0x12); //
-oled_cmd(0x81); //set contrast
-oled_cmd(0x00); //0x8f, 0xcf
-oled_cmd(0xd9); //pre-charge period
-oled_cmd(0xf1); //
-oled_cmd(0xdb); //VCOMH deselect level
-oled_cmd(0x40); //
-oled_cmd(0xa4); //entire display off
-oled_cmd(0xa6); //normal display, 0xa7 inverse display
-oled_cmd(0xaf); //display turned on
+for(uint8_t i=0; i<25; i++) oled_cmd(pgm_read_byte(&init[i])); //send init data to the display
 }
 
 
