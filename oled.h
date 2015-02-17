@@ -221,7 +221,7 @@ _delay_us(10); //delay for reset
 
 RST_H; //display normal operation
 
-for(uint8_t i=0; i<25; i++) oled_cmd(pgm_read_byte(&init[i])); //send init data to the display
+for(uint8_t i=0; i<sizeof init; i++) oled_cmd(pgm_read_byte(&init[i])); //send the init commands
 }
 
 
@@ -284,11 +284,10 @@ for(uint16_t x=0; x<1024; x++) oled_data(0); //columns*strings(pages)=128*8=1024
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void oled_char(uint8_t sign) //print char
+void oled_char(uint8_t sign) //write a character
 {
 if(sign<32 || sign>127) sign=128; //filling field for invalid characters
-uint16_t pos = 5*(sign-32);
-for(uint8_t y=0; y<5; y++) oled_data(pgm_read_byte(&font[pos+y]));
+for(uint8_t y=0; y<5; y++) oled_data(pgm_read_byte(&font[5*(sign-32)+y])); //write
 oled_data(0); //space between characters
 }
 
@@ -296,5 +295,5 @@ oled_data(0); //space between characters
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void oled_string(char *str) //print string
 {
-for(uint8_t c=0; *(str+c)!='\0'; c++) oled_char(*(str+c));
+for(; *str!='\0'; str++) oled_char(*str); //write
 }
