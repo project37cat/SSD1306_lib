@@ -205,20 +205,16 @@ void oled_string(char *str);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void oled_init(void) //init port and display
 {
-SCK_DDR;
+SCK_DDR; //pins is configured as an output pins
 DAT_DDR;
 RST_DDR;
 DC_DDR;
 CS_DDR;
 
+CS_H; //chip select inactive
+
 RST_L; //display chip reset
-CS_H;
-DC_L;
-DAT_L;
-SCK_L;
-
-_delay_us(10); //delay for reset
-
+_delay_us(3); //delay for reset
 RST_H; //display normal operation
 
 for(uint8_t i=0; i<sizeof init; i++) oled_cmd(pgm_read_byte(&init[i])); //send the init commands
